@@ -1,24 +1,29 @@
 import pygame
+from choosing_character import choosing_character
+
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 w, h = pygame.display.get_surface().get_size()
+all_sprites = pygame.sprite.Group()
+choosing_character_sprites = pygame.sprite.Group()
+frames = pygame.sprite.Group()
 
 
-class Text:
+class Text(pygame.sprite.Sprite):
     def __init__(self, text, size, color):
+        super().__init__(all_sprites)
         self.text = text
         self.size = size
         self.color = color
-        self.font_skeleton = pygame.font.Font(
-            "pixeleum.ttf", self.size).render(self.text, False, self.color)
-        self.rect = self.font_skeleton.get_rect()
+        self.font = pygame.font.Font("pixeleum.ttf", self.size)
+        self.textSurf = self.font.render(self.text, False, self.color)
+        W = self.textSurf.get_width()
+        H = self.textSurf.get_height()
+        self.image = pygame.Surface((W, H))
+        self.rect = self.image.get_rect()
+        self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
 
-    def draw(self):
-        screen.blit(self.font_skeleton, (self.rect.x, self.rect.y))
-
-
-running = True
 
 # Весь текст
 game_name = Text("Spirit Warrior", 100, (255, 255, 255))
@@ -38,29 +43,27 @@ exit_game.rect.x = w // 2 - exit_game.rect.width // 2
 exit_game.rect.y = game_name.rect.y * 4.5
 
 # Игровой цикл
+running = True
+clock = pygame.time.Clock()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if start_game.rect.collidepoint(event.pos):
-                start_game.font_skeleton = pygame.font.Font(
-                    "pixeleum.ttf", start_game.size).render(start_game.text, False, (153, 144, 142))
-                print("GAME STARTED")
+                all_sprites.remove(all_sprites.sprites())
+                choosing_character(screen, choosing_character_sprites, w, h)
             if load_game.rect.collidepoint(event.pos):
                 pass
             if exit_game.rect.collidepoint(event.pos):
                 running = False
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if start_game.rect.collidepoint(event.pos):
-                start_game.font_skeleton = pygame.font.Font(
-                    "pixeleum.ttf", start_game.size).render(start_game.text, False, (255, 255, 215))
+        choosing_character_sprites.update(event, frames)
 
     screen.fill((0, 0, 0))
-    game_name.draw()
-    start_game.draw()
-    load_game.draw()
-    exit_game.draw()
+    all_sprites.draw(screen)
+    frames.draw(screen)
+    choosing_character_sprites.draw(screen)
 
     pygame.display.flip()
+    clock.tick(60)
 pygame.quit()
