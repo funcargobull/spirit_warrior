@@ -11,7 +11,7 @@ class Text:
         self.size = size
         self.color = color
         self.font_skeleton = pygame.font.Font(
-            "code/pixeleum.ttf", self.size).render(self.text, False, self.color)
+            "pixeleum.ttf", self.size).render(self.text, False, self.color)
         self.rect = self.font_skeleton.get_rect()
 
     def draw(self):
@@ -45,7 +45,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if start_game.rect.collidepoint(event.pos):
                 start_game.font_skeleton = pygame.font.Font(
-                    "code/pixeleum.ttf", start_game.size).render(start_game.text, False, (153, 144, 142))
+                    "pixeleum.ttf", start_game.size).render(start_game.text, False, (153, 144, 142))
                 print("GAME STARTED")
             if load_game.rect.collidepoint(event.pos):
                 pass
@@ -54,7 +54,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if start_game.rect.collidepoint(event.pos):
                 start_game.font_skeleton = pygame.font.Font(
-                    "code/pixeleum.ttf", start_game.size).render(start_game.text, False, (255, 255, 215))
+                    "pixeleum.ttf", start_game.size).render(start_game.text, False, (255, 255, 215))
 
     screen.fill((0, 0, 0))
     game_name.draw()
