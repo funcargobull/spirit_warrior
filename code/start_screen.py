@@ -23,6 +23,14 @@ class Text(pygame.sprite.Sprite):
         self.image = pygame.Surface((W, H))
         self.rect = self.image.get_rect()
         self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
+    
+    def clear_all(self):
+        self.rect.size = (0, 0)
+        self.rect.x = -1000
+        self.rect.y = -1000
+    
+    def return_scene(self):
+        pass
 
 
 # Весь текст
@@ -45,14 +53,16 @@ exit_game.rect.y = game_name.rect.y * 4.5
 # Игровой цикл
 running = True
 clock = pygame.time.Clock()
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if start_game.rect.collidepoint(event.pos):
-                all_sprites.remove(all_sprites.sprites())
-                choosing_character(screen, choosing_character_sprites, w, h)
+                for sprite in all_sprites.sprites():
+                    sprite.clear_all()
+                choosing_character(choosing_character_sprites, w, h)
             if load_game.rect.collidepoint(event.pos):
                 pass
             if exit_game.rect.collidepoint(event.pos):
