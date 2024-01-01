@@ -6,8 +6,6 @@ location_sprites = pygame.sprite.Group()
 enemy_sprites = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 weapons_sprites = pygame.sprite.Group()
-'''пресонаж и должен следовать за положением мышки, ибо туда он будет стрелять
-управляется клавишами w, s, a, d. Кнопки мыши пока не работают, лучше их не нажимать). Рваную анимацию я потом починю'''
 character = Knight(250, 250, all_sprites, character_sprites)
 saber = Saber(weapons_sprites, all_sprites)
 character.weapons = [saber, saber]
