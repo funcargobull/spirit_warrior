@@ -1,16 +1,19 @@
 import pygame
 from math import atan, degrees, radians
 from load_images import load_image
+from sprites import *
 
 fps = 30
 
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, health, armor, energy, weapons, x, y, anim, speed, character_sprites, all_sprites, xc, yc):
+    def __init__(self, health, armor, energy, weapons, x, y, anim, speed, xc, yc):
         super().__init__(character_sprites, all_sprites)
         self.location = True  # если персонаж смотрит вправо, то True, иначе False
         self.rotation_angle = 0  # угол поворота оружия относительно персонажа
         self.armor_tick = pygame.time.get_ticks()  # время, используемое для восстановления брони
+        self.ulta_tick = pygame.time.get_ticks()  # время, используемое для восстановления способности
+        self.ulta_data = []  # специальный объект для хранения данных, исполуемых способностью персонажа
         # путь к анимации передается в формате название_файла{}.формат, где на месте {} будут стоять номера спрайтов
         self.ANIM_DEATH = load_image(anim.format(16), 2)
         self.ANIM_RIGHT = [load_image(anim.format(i), 2) for i in range(8, 16)]
@@ -59,7 +62,7 @@ class Character(pygame.sprite.Sprite):
 
     def attack(self):
         """аттакует, используя выбранное оружие"""
-        self.weapons[0].attack()
+        self.weapons[0].attack(self)
 
     def change_weapon(self):
         """меняет оружие в руках персонажа"""
@@ -71,7 +74,7 @@ class Character(pygame.sprite.Sprite):
         self.image = image
         self.mask = pygame.mask.from_surface(self.image)
 
-    def ulta(self):
+    def ulta(self, key=None):
         """уникальная способность персонажа"""
         pass
 
@@ -81,6 +84,7 @@ class Character(pygame.sprite.Sprite):
 
     def update(self, events, pos):
         self.position(*pos)
+        self.ulta(key='update')
         if self.armor == self.max_armor:
             self.armor_tick = pygame.time.get_ticks()
         else:
