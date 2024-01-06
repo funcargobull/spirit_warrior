@@ -1,9 +1,13 @@
 import pygame
 from database import Database
+from characters import *
+from sprites import *
+from weapons import *
 
 database = Database()
 
 
+# Загрузка картинки
 def load_image(fullname, colorkey=None):
     image = pygame.image.load(fullname)
     if colorkey is not None:
@@ -34,31 +38,19 @@ class Wall(pygame.sprite.Sprite):
         self.rect.y = pos_y
 
 
-class Camera:
-    # Зададим начальный сдвиг камеры
-    def __init__(self):
-        self.dx = 0
-        self.dy = 0
-
-    # Сдвинуть объект obj на смещение камеры
-    def apply(self, obj):
-        obj.rect.x += self.dx
-        obj.rect.y += self.dy
-
-    # Позиционировать камеру на объекте target
-    def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
-
-
 class NewGame:
-    def __init__(self, group, hero_name, wave):
-        self.group = group
-        self.hero_name = hero_name
+    def __init__(self, hero, wave):
+        self.hero = hero
         self.wave = wave
 
-    def setup(self, walls, tiles):
-        Wall(0, 0, walls)
-        # for x in range(0, 1920, 60):
-        #     Wall(x, 60, walls)
-        # Wall(0, 600, walls)
+    def setup(self, w, h):
+        for x in range(0, w, 60):
+            Wall(x, 0, walls, camera_entities)
+            Wall(x, h - 60, walls, camera_entities)
+        for y in range(60, h, 60):
+            Wall(0, y, walls, camera_entities)
+            Wall(w - 60, y, walls, camera_entities)
+        for y in range(60, h - 60, 60):
+            for x in range(60, w - 60, 60):
+                Tile(x, y, tiles, camera_entities)
+

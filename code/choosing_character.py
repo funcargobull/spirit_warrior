@@ -87,41 +87,42 @@ class ChoosingCharacter:
     def __init__(self, group, width, height):
         self.group = group
 
-        self.main_text = Text(self.group, "Выберите персонажа", 100, (255, 255, 255))
+        self.main_text = Text(self.group, "Выберите персонажа", 80, (255, 255, 255))
         self.main_text.rect.x = width // 2 - self.main_text.rect.width // 2
-        self.main_text.rect.y = height // 6
-
-        self.assassin_text = Text(self.group, "Ассасин", 50, (255, 255, 255))
-        self.assassin_text.rect.x = width // 3
-        self.assassin_text.rect.y = height // 2
-
-        self.knight_text = Text(self.group, "Рыцарь", 50, (255, 255, 255))
-        self.knight_text.rect.x = width - width // 3 - self.assassin_text.rect.width
-        self.knight_text.rect.y = height // 2
-
-        self.priest_sprite = Hero(
-            self.group, "pictures/characters/Priest/priest_0_0.png", (0, 0), (135, 155))
-        self.priest_sprite.rect.x = self.assassin_text.rect.bottomright[0] + \
-                                    self.priest_sprite.rect.width // 14
-        self.priest_sprite.rect.y = self.assassin_text.rect.bottomright[1] + \
-                                    self.priest_sprite.rect.height // 3
-
-        self.priest_text = Text(self.group, "Священник", 50, (255, 255, 255))
-        self.priest_text.rect.x = self.priest_sprite.rect.bottomleft[0] - \
-                                  self.priest_text.rect.width // 3.5
-        self.priest_text.rect.y = self.priest_sprite.rect.y + self.priest_sprite.rect.height
+        self.main_text.rect.y = height // 30
 
         self.assassin_sprite = Hero(
             self.group, "pictures/characters/Assassin/assassin_0_0.png", (0, 0), (145, 140))
-        self.assassin_sprite.rect.x = self.assassin_text.rect.x + self.assassin_sprite.rect.width // 4
-        self.assassin_sprite.rect.y = self.assassin_text.rect.y - self.assassin_sprite.rect.height
+        self.assassin_sprite.rect.x = self.main_text.rect.x + self.main_text.rect.width // 4
+        self.assassin_sprite.rect.y = self.main_text.rect.y + self.assassin_sprite.rect.height + 20
+
+        self.assassin_text = Text(self.group, "Ассасин", 50, (255, 255, 255))
+        self.assassin_text.rect.x = self.assassin_sprite.rect.x - (
+                self.assassin_text.rect.width - self.assassin_sprite.rect.width) // 2
+        self.assassin_text.rect.y = self.assassin_sprite.rect.y + self.assassin_sprite.rect.height
 
         self.knight_sprite = Hero(
             self.group, "pictures/characters/Knight/knight_0_0.png", (0, 0), (170, 140))
-        self.knight_sprite.rect.x = self.knight_text.rect.x + self.knight_sprite.rect.width // 14
-        self.knight_sprite.rect.y = self.knight_text.rect.y - self.knight_sprite.rect.height
+        self.knight_sprite.rect.x = width - self.assassin_sprite.rect.x - self.assassin_sprite.rect.width
+        self.knight_sprite.rect.y = self.assassin_sprite.rect.y
 
-        self.start_new_game = Text(self.group, "Начать", 42, (122, 118, 102))
+        self.knight_text = Text(self.group, "Рыцарь", 50, (255, 255, 255))
+        self.knight_text.rect.x = self.knight_sprite.rect.x - (
+                self.knight_text.rect.width - self.knight_sprite.rect.width) // 2
+        self.knight_text.rect.y = self.knight_sprite.rect.y + self.knight_sprite.rect.height
+
+        self.priest_sprite = Hero(
+            self.group, "pictures/characters/Priest/priest_0_0.png", (0, 0), (135, 155))
+        self.priest_sprite.rect.x = (self.assassin_text.rect.bottomright[0] + self.knight_text.rect.bottomleft[
+            0]) // 2 - self.priest_sprite.rect.width // 2
+        self.priest_sprite.rect.y = self.assassin_text.rect.bottomright[1]
+
+        self.priest_text = Text(self.group, "Священник", 50, (255, 255, 255))
+        self.priest_text.rect.x = self.priest_sprite.rect.x - (
+                self.priest_text.rect.width - self.priest_sprite.rect.width) // 2
+        self.priest_text.rect.y = self.priest_sprite.rect.y + self.priest_sprite.rect.height
+
+        self.start_new_game = Text(self.group, "Начать", 42, (255, 0, 0))
         self.start_new_game.rect.x = self.priest_text.rect.x + (
                 self.priest_text.rect.width - self.start_new_game.rect.width) // 2
-        self.start_new_game.rect.y = height - 3 * self.start_new_game.rect.height
+        self.start_new_game.rect.y = height - self.start_new_game.rect.height

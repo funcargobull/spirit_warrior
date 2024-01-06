@@ -4,10 +4,9 @@ from load_images import load_image
 from sprites import *
 
 
-
 class Character(pygame.sprite.Sprite):
     def __init__(self, health, armor, energy, weapons, x, y, anim, speed, xc, yc):
-        super().__init__(character_sprites, all_sprites)
+        super().__init__(character_sprites, camera_entities)
         self.location = True  # если персонаж смотрит вправо, то True, иначе False
         self.rotation_angle = 0  # угол поворота оружия относительно персонажа
         self.armor_tick = pygame.time.get_ticks()  # время, используемое для восстановления брони
@@ -33,6 +32,8 @@ class Character(pygame.sprite.Sprite):
         self.armor = self.max_armor = armor
         self.energy = self.max_energy = energy
         self.weapons = weapons
+        # стены
+        self.walls = walls
 
     def update_armor(self):
         """восстанавливает броню персонажа"""
@@ -127,6 +128,6 @@ class Character(pygame.sprite.Sprite):
             going = self.go(1, 0)
         if keys[pygame.K_e]:
             self.interaction()
-        if pygame.sprite.spritecollideany(self, location_sprites):  # столкновение со стеной
+        if pygame.sprite.spritecollideany(self, walls):  # столкновение со стеной
             self.go(*[-i for i in going])
         self.weapons[0].update(self)
