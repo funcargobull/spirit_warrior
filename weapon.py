@@ -24,15 +24,16 @@ class Weapon(pygame.sprite.Sprite):
         self.angle = 0
 
     def attack(self, character):
-        time = pygame.time.get_ticks()
+        """аттакует противника"""
+        time = pygame.time.get_ticks()  # текущее время
+        # проверяем, есть ли енергия для стрельбы и прошли ли для этого достаточно времени
         if self.time_shot + self.ratefire <= time and character.energy - self.cost_energy >= 0:
+            character.energy -= self.cost_energy
             if self.type_bullet == 'sword':
                 bullet = pygame.sprite.spritecollide(self, bullet_sprites, True)  # столкновение с пулей
-                enemy = pygame.sprite.spritecollide(self, enemy_sprites, False)  # удар по противнику
-                if len(enemy) > 0:
-                    enemy[0].health -= self.damage
+                Bullet(self.rect.x + self.w * cos(self.angle) // 2, self.rect.y - self.h * sin(self.angle) // 2,
+                       self.angle, 0, self.size_bullet, self.damage, 'friend', timelife=100)
             else:
-                character.energy -= self.cost_energy
                 Bullet(self.rect.x, self.rect.y, self.angle, self.speed_bullet,
                        self.size_bullet, self.damage, 'friend')
             self.time_shot = time
@@ -43,10 +44,14 @@ class Weapon(pygame.sprite.Sprite):
         image = self.orig_image
         if not character.location:
             image = pygame.transform.flip(self.orig_image, False, True)
-            xc = character.w - character.xc
-        self.image = pygame.transform.rotate(image, degrees(self.angle))
+            xc = character.w - character.xc  # отзеркаливаем позицию для оружия
+        self.image = pygame.transform.rotate(image, degrees(self.angle))  # поворачиваем картинку
         self.rect.x = character.rect.x + xc
         self.rect.y = character.rect.y + yc
         self.rect = self.image.get_rect(center=(self.rect.x, self.rect.y))  # передвигаем оружие в центр персонажа
         self.rect.x += self.w * cos(self.angle) // 2
         self.rect.y -= self.h * sin(self.angle)
+
+    def draw(self, screen):
+        """рисует объект на плоскость"""
+        screen.blit(self.image, self.rect)

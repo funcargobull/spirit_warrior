@@ -10,7 +10,8 @@ def load_image(name, scale, colorkey=None):
         exit()
     image = pygame.image.load(name)
     width, height = image.get_size()
-    image = pygame.transform.scale(image, (width * scale, height * scale))
+    image = pygame.transform.scale(image,
+                                   (width * scale, height * scale))  # увличиваем изображения в заданое кол-во раз
     if colorkey is not None:
         image = image.convert()
         if colorkey == -1:

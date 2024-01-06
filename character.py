@@ -3,7 +3,6 @@ from math import atan, degrees, radians
 from load_images import load_image
 from sprites import *
 
-fps = 30
 
 
 class Character(pygame.sprite.Sprite):
@@ -13,7 +12,7 @@ class Character(pygame.sprite.Sprite):
         self.rotation_angle = 0  # угол поворота оружия относительно персонажа
         self.armor_tick = pygame.time.get_ticks()  # время, используемое для восстановления брони
         self.ulta_tick = pygame.time.get_ticks()  # время, используемое для восстановления способности
-        self.ulta_data = []  # специальный объект для хранения данных, исполуемых способностью персонажа
+        self.change_weapon_tick = pygame.time.get_ticks()  # время, используемое для смены оружия
         # путь к анимации передается в формате название_файла{}.формат, где на месте {} будут стоять номера спрайтов
         self.ANIM_DEATH = load_image(anim.format(16), 2)
         self.ANIM_RIGHT = [load_image(anim.format(i), 2) for i in range(8, 16)]
@@ -38,15 +37,16 @@ class Character(pygame.sprite.Sprite):
     def update_armor(self):
         """восстанавливает броню персонажа"""
         time = pygame.time.get_ticks()
-        if self.armor_tick + fps * 5 <= time:  # время восстановления
+        if self.armor_tick + 5000 <= time:  # время восстановления
             self.armor += 1
             if self.armor < self.max_armor:
-                self.armor_tick = time - fps  # убираем время, чтобы броня восстанавливалась по 1 еденице в секунду
+                self.armor_tick += 500  # убираем время, чтобы броня восстанавливалась по 1 еденице в секунду
 
     def go(self, x, y):
         """сдвигает персонажа согласно его скорости.
         Для свдига по осям x, y необходимо передать 1 или -1 там где необходимо сдвинуть, иначе 0"""
         self.rect = self.rect.move(self.speed * x, self.speed * y)
+        return self.speed * x, self.speed * y
 
     def position(self, x1, y1):
         """Изменяет угол направления оружия"""
@@ -66,15 +66,18 @@ class Character(pygame.sprite.Sprite):
 
     def change_weapon(self):
         """меняет оружие в руках персонажа"""
-        weapon = self.weapons.pop(0)
-        self.weapons.append(weapon)
+        time_action, time = 200, pygame.time.get_ticks()
+        if self.change_weapon_tick + time_action < time:
+            weapon = self.weapons.pop(0)
+            self.weapons.append(weapon)
+            self.change_weapon_tick = time
 
     def change_image(self, image):
         """изменяет текущую картинку и маску персонажа"""
         self.image = image
         self.mask = pygame.mask.from_surface(self.image)
 
-    def ulta(self, key=None):
+    def ulta(self):
         """уникальная способность персонажа"""
         pass
 
@@ -83,14 +86,18 @@ class Character(pygame.sprite.Sprite):
         pass
 
     def update(self, events, pos):
+        '''if self.health <= 0:  # проевряем, жив ли персонаж
+            self.image = self.ANIM_DEATH
+            return'''
         self.position(*pos)
-        self.ulta(key='update')
+        going = (0, 0)
         if self.armor == self.max_armor:
             self.armor_tick = pygame.time.get_ticks()
         else:
             self.update_armor()
         self.animcount = (self.animcount + 1) % 8
-        keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()  # список всех нажатых клавиш клавиатуры
+        # определяем направление движения персонажа
         if keys[pygame.K_a] or keys[pygame.K_s]:
             self.change_image(self.ANIM_LEFT[self.animcount])
             self.location = False
@@ -103,7 +110,7 @@ class Character(pygame.sprite.Sprite):
         else:
             self.change_image(self.ANIM_STAY_LEFT[self.animcount])
             self.location = False
-        mouse_click = pygame.mouse.get_pressed()
+        mouse_click = pygame.mouse.get_pressed()  # список всех нажатых клавиш мыши
         if mouse_click[0]:
             self.attack()
         if mouse_click[2]:
@@ -111,13 +118,15 @@ class Character(pygame.sprite.Sprite):
         if keys[pygame.K_q]:
             self.change_weapon()
         if keys[pygame.K_w]:
-            self.go(0, -1)
+            going = self.go(0, -1)
         if keys[pygame.K_a]:
-            self.go(-1, 0)
+            going = self.go(-1, 0)
         if keys[pygame.K_s]:
-            self.go(0, 1)
+            going = self.go(0, 1)
         if keys[pygame.K_d]:
-            self.go(1, 0)
+            going = self.go(1, 0)
         if keys[pygame.K_e]:
             self.interaction()
+        if pygame.sprite.spritecollideany(self, location_sprites):  # столкновение со стеной
+            self.go(*[-i for i in going])
         self.weapons[0].update(self)

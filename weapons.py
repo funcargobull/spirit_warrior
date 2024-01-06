@@ -3,7 +3,7 @@ from weapon import Weapon
 
 class Machete(Weapon):
     def __init__(self):
-        super().__init__(6, 1, 'sword', 200, 'picturies/weapons/weapons_62.png', 0, 20, 10)
+        super().__init__(6, 1, 'sword', 600, 'picturies/weapons/weapons_62.png', 0, 20, 10)
 
 
 class OldPistol(Weapon):
@@ -63,27 +63,27 @@ class MachineGun(Weapon):
 
 class Rapira(Weapon):
     def __init__(self):
-        super().__init__(6, 1, 'sword', 200, 'picturies/weapons/weapons_57.png', 0, 20, 10)
+        super().__init__(6, 1, 'sword', 400, 'picturies/weapons/weapons_57.png', 0, 20, 10)
 
 
 class LightSaber(Weapon):
     def __init__(self):
-        super().__init__(8, 1, 'sword', 150, 'picturies/weapons/weapons_109.png', 0, 35, 10)
+        super().__init__(8, 1, 'sword', 350, 'picturies/weapons/weapons_109.png', 0, 35, 10)
 
 
 class Axe(Weapon):
     def __init__(self):
-        super().__init__(10, 1, 'sword', 300, 'picturies/weapons/weapons3_3.png', 0, 25, 10)
+        super().__init__(10, 1, 'sword', 400, 'picturies/weapons/weapons3_3.png', 0, 25, 10)
 
 
 class AxeSnow(Weapon):
     def __init__(self):
-        super().__init__(9, 1, 'sword', 150, 'picturies/weapons/weapons5_52.png', 0, 40, 10)
+        super().__init__(9, 1, 'sword', 400, 'picturies/weapons/weapons5_52.png', 0, 40, 10)
 
 
 class SwordNinja(Weapon):
     def __init__(self):
-        super().__init__(10, 1, 'sword', 100, 'picturies/weapons/weapons_ninja.png', 0, 50, 10)
+        super().__init__(10, 1, 'sword', 400, 'picturies/weapons/weapons_ninja.png', 0, 60, 10)
 
 
 class LaserGun(Weapon):
