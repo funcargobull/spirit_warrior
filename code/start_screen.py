@@ -8,7 +8,7 @@ from database import Database
 pygame.init()
 pygame.font.init()
 
-screen = pygame.display.set_mode((0, 0))
+screen = pygame.display.set_mode((1920, 1080))
 w, h = pygame.display.get_surface().get_size()
 print(w, h)
 
