@@ -47,7 +47,7 @@ class Character(pygame.sprite.Sprite):
         """сдвигает персонажа согласно его скорости.
         Для свдига по осям x, y необходимо передать 1 или -1 там где необходимо сдвинуть, иначе 0"""
         self.rect = self.rect.move(self.speed * x, self.speed * y)
-        return self.speed * x, self.speed * y
+        return x, y
 
     def position(self, x1, y1):
         """Изменяет угол направления оружия"""
@@ -91,7 +91,7 @@ class Character(pygame.sprite.Sprite):
             self.image = self.ANIM_DEATH
             return'''
         self.position(*pos)
-        going = (0, 0)
+        going = []
         if self.armor == self.max_armor:
             self.armor_tick = pygame.time.get_ticks()
         else:
@@ -119,18 +119,17 @@ class Character(pygame.sprite.Sprite):
         if keys[pygame.K_q]:
             self.change_weapon()
         if keys[pygame.K_w]:
-            going = self.go(0, -1)
+            going.append(self.go(0, -1))
         if keys[pygame.K_a]:
-            going = self.go(-1, 0)
+            going.append(self.go(-1, 0))
         if keys[pygame.K_s]:
-            going = self.go(0, 1)
+            going.append(self.go(0, 1))
         if keys[pygame.K_d]:
-            going = self.go(1, 0)
-        if keys[pygame.K_w] and pygame.sprite.spritecollideany(self, walls):
-            going = self.go(0, 0)
+            going.append(self.go(1, 0))
         if keys[pygame.K_e]:
             self.interaction()
         # столкновение со стеной
         if pygame.sprite.spritecollideany(self, walls):
-            self.go(*[-i for i in going])
+            for g in going:
+                self.go(*[-i for i in g])
         self.weapons[0].update(self)
