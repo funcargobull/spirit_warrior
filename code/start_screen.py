@@ -24,24 +24,6 @@ new_game_began = False
 database = Database()
 
 
-# Камера
-class Camera:
-    # Зададим начальный сдвиг камеры
-    def __init__(self):
-        self.dx = 0
-        self.dy = 0
-
-    # Сдвинуть объект obj на смещение камеры
-    def apply(self, obj):
-        obj.rect.x += self.dx + 27
-        obj.rect.y += self.dy + 30
-
-    # Позиционировать камеру на объекте target
-    def update(self, target):
-        self.dx = -(target.rect.x + target.rect.width // 2 - pygame.display.get_surface().get_size()[0] // 2)
-        self.dy = -(target.rect.y + target.rect.height // 2 - pygame.display.get_surface().get_size()[1] // 2)
-
-
 # Класс текста
 class Text(pygame.sprite.Sprite):
     def __init__(self, text, size, color):
@@ -85,7 +67,6 @@ exit_game.rect.y = game_name.rect.y * 4.5
 running = True
 clock = pygame.time.Clock()
 pos = (0, 0)
-camera = Camera()
 
 while running:
     screen.fill((0, 0, 0))
@@ -124,9 +105,10 @@ while running:
                         hero_name = f.read()
                     # Начало новой игры
                     character = eval(f"{hero_name}(w // 2, h // 2)")
-                    character.weapons = [OldPistol()]
+                    character.weapons = [M4()]
                     new_game = NewGame(character, 1)
                     new_game.setup(w, h)
+                    new_game.start_wave()
                     new_game_began = True
             except NameError:
                 pass
@@ -144,9 +126,6 @@ while running:
 
     if new_game_began:
         screen.blit(walls_and_tiles, (0, 0))
-        camera.update(character)
-        for sprite in camera_entities:
-            camera.apply(sprite)
 
         walls.draw(screen)
         tiles.draw(screen)
@@ -169,6 +148,6 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
-    print(pygame.mouse.get_pos())
+    # print(pygame.mouse.get_pos())
 
 pygame.quit()

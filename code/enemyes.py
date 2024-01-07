@@ -3,7 +3,7 @@ from enemy import Enemy
 
 class Skeleton(Enemy):
     def __init__(self, x, y):
-        super().__init__(10, 4, 2, 'pictures/enemyes/enemy08_{}.png', 8, 'faraway', 1000, x, y)
+        super().__init__(10, 3, 2, 'pictures/enemyes/enemy08_{}.png', 8, 'faraway', 1200, x, y)
 
 
 class Crab(Enemy):

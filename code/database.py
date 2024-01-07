@@ -10,11 +10,11 @@ class Database:
         # Текущие показатели игрока
         self.cur.execute("""
         create table if not exists current_stats (
-        hero TEXT
-        hp INTEGER
-        shield INTEGER
-        energy INTEGER
-        wave INTEGER
+        hero TEXT,
+        hp INTEGER,
+        shield INTEGER,
+        energy INTEGER,
+        wave INTEGER,
         weapon TEXT
         )
         """)
@@ -22,8 +22,8 @@ class Database:
         # Данные по волнам
         self.cur.execute("""
         create table if not exists waves_stats (
-        wave INT
-        enemy_count INT
+        wave INT,
+        enemies TEXT
         )
         """)
 
@@ -45,3 +45,7 @@ class Database:
         # self.cur.execute("""
         # insert into current_stats values (?, ?, ?, ?, 1, "Machete")
         # """, (hero_name, hero.health, hero.armor, hero.energy))
+
+    def get_waves(self):
+        self.cur.execute("select * from waves_stats")
+        return self.cur.fetchall()
