@@ -87,8 +87,8 @@ class NewGame:
                 Tile(x, y, tiles, camera_entities)
 
         UiElement(15, 15, "pictures/ui/stats.png", (255, 122), ui_sprites)
-        UiElement(1125, 15, "pictures/ui/coin_place.png", (100, 75), ui_sprites)
-        UiElement(1150, 15, "pictures/ui/coin.png", (60, 67), ui_sprites)
+        UiElement(1125, 15, "pictures/ui/coin_place.png", (146, 75), ui_sprites)
+        UiElement(1150, 18, "pictures/ui/coin.png", (60, 67), ui_sprites)
 
         self.health_count = Text(f"{self.hero.health}/{self.hero.max_health}", 20, (255, 255, 255))
         self.armor_count = Text(f"{self.hero.armor}/{self.hero.max_armor}", 20, (255, 255, 255))
@@ -112,7 +112,7 @@ class NewGame:
 
         self.money_count = Text(f"{self.hero.money}", 30, (0, 0, 0))
         self.money_count.rect.x = 1225
-        self.money_count.rect.y = 25
+        self.money_count.rect.y = 28
 
         self.wave_count = Text(f"Волна: {self.wave}", 30, (255, 255, 255))
         self.wave_count.rect.x = 1125
@@ -127,7 +127,7 @@ class NewGame:
                 self.start_wave()
 
     def start_wave(self):
-        self.status = "wave_on"
+        # self.status = "wave_on"
         for item in database.get_waves():
             if self.wave == item[0]:
                 enemies = item[1]

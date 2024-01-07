@@ -105,7 +105,7 @@ while running:
                         hero_name = f.read()
                     # Начало новой игры
                     character = eval(f"{hero_name}(w // 2, h // 2)")
-                    character.weapons = [M4()]
+                    character.weapons = [OldPistol()]
                     new_game = NewGame(character, 1)
                     new_game.setup(w, h)
                     new_game.start_wave()
