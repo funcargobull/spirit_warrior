@@ -33,8 +33,8 @@ class Camera:
 
     # Сдвинуть объект obj на смещение камеры
     def apply(self, obj):
-        obj.rect.x += self.dx
-        obj.rect.y += self.dy
+        obj.rect.x += self.dx + 27
+        obj.rect.y += self.dy + 30
 
     # Позиционировать камеру на объекте target
     def update(self, target):
@@ -124,7 +124,7 @@ while running:
                         hero_name = f.read()
                     # Начало новой игры
                     character = eval(f"{hero_name}(w // 2, h // 2)")
-                    character.weapons = [OldPistol(), Machete(), PPM1(), M4()]
+                    character.weapons = [OldPistol()]
                     new_game = NewGame(character, 1)
                     new_game.setup(w, h)
                     new_game_began = True
@@ -161,10 +161,14 @@ while running:
         bullet_sprites.draw(screen)
         character_sprites.update(events, pos)
         bullet_sprites.update()
+        enemy_sprites.update(character)
 
         ui_sprites.draw(screen)
+        new_game.update()
+        # print(character.health, character.energy)
 
     pygame.display.flip()
     clock.tick(60)
+    print(pygame.mouse.get_pos())
 
 pygame.quit()

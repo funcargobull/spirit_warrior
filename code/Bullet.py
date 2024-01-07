@@ -6,7 +6,7 @@ import pygame
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, speed, size, damage, relation, timelife=None):
-        super().__init__(bullet_sprites, all_sprites)
+        super().__init__(bullet_sprites, all_sprites, camera_entities)
         if timelife is not None:
             self.image = pygame.transform.rotate(load_image('pictures/weapons/bullet_knife.png', size), degrees(angle))
         elif relation == 'friend':

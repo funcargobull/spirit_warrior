@@ -3,6 +3,7 @@ from database import Database
 from characters import *
 from sprites import *
 from weapons import *
+from enemyes import *
 
 database = Database()
 
@@ -47,10 +48,28 @@ class Wall(pygame.sprite.Sprite):
         self.rect.y = pos_y
 
 
+class Text(pygame.sprite.Sprite):
+    def __init__(self, text, size, color):
+        super().__init__(ui_sprites)
+        self.text = text
+        self.size = size
+        self.color = color
+        self.font = pygame.font.Font("pixeleum.ttf", self.size)
+        self.textSurf = self.font.render(self.text, True, self.color)
+        W = self.textSurf.get_width()
+        H = self.textSurf.get_height()
+        self.image = pygame.Surface((W, H), pygame.SRCALPHA)
+        self.rect = self.image.get_rect()
+        self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
+
+
 class NewGame:
     def __init__(self, hero, wave):
         self.hero = hero
         self.wave = wave
+        self.health_count = None
+        self.energy_count = None
+        self.armor_count = None
 
     def setup(self, w, h):
         for x in range(0, w, 60):
@@ -63,4 +82,23 @@ class NewGame:
             for x in range(60, w - 60, 60):
                 Tile(x, y, tiles, camera_entities)
 
-        UiElement(15, 15, "pictures/ui/stats.png", (200, 98), ui_sprites)
+        UiElement(15, 15, "pictures/ui/stats.png", (255, 122), ui_sprites)
+        Crab(100, 100)
+
+        self.health_count = Text(f"{self.hero.health}/{self.hero.max_health}", 20, (255, 255, 255))
+        self.armor_count = Text(f"{self.hero.armor}/{self.hero.max_armor}", 20, (255, 255, 255))
+        self.energy_count = Text(f"{self.hero.energy}/{self.hero.max_energy}", 20, (255, 255, 255))
+
+    def update(self):
+        ui_sprites.remove([self.health_count, self.armor_count, self.energy_count])
+        self.health_count = Text(f"{self.hero.health}/{self.hero.max_health}", 20, (255, 255, 255))
+        self.health_count.rect.x = 130
+        self.health_count.rect.y = 26
+
+        self.armor_count = Text(f"{self.hero.armor}/{self.hero.max_armor}", 20, (255, 255, 255))
+        self.armor_count.rect.x = self.health_count.rect.x
+        self.armor_count.rect.y = self.health_count.rect.y + self.armor_count.rect.height + 3
+
+        self.energy_count = Text(f"{self.hero.energy}/{self.hero.max_energy}", 20, (255, 255, 255))
+        self.energy_count.rect.x = 105
+        self.energy_count.rect.y = self.armor_count.rect.y + self.energy_count.rect.height + 4
