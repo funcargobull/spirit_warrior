@@ -5,7 +5,7 @@ from character import Character
 
 class Knight(Character):
     def __init__(self, x, y):
-        super().__init__(6, 5, 180, [], x, y, 'pictures/characters/Knight/knight_0_{}.png', 10, 20, 20)
+        super().__init__(6, 5, 180, [], x, y, 'pictures/characters/Knight/knight_0_{}.png', 5, 20, 20)
 
     def ulta(self):
         """восстанавливает 3 еденицы брони"""
@@ -17,7 +17,7 @@ class Knight(Character):
 
 class Assassin(Character):
     def __init__(self, x, y):
-        super().__init__(4, 4, 180, [], x, y, 'pictures/characters/Assassin/assassin_0_{}.png', 15, 20, 20)
+        super().__init__(4, 4, 180, [], x, y, 'pictures/characters/Assassin/assassin_0_{}.png', 6, 20, 20)
 
     def ulta(self):
         """восстанавливает 30 едениц енергии"""
@@ -29,7 +29,7 @@ class Assassin(Character):
 
 class Priest(Character):
     def __init__(self, x, y):
-        super().__init__(3, 5, 200, [], x, y, 'pictures/characters/Priest/priest_0_{}.png', 10, 20, 20)
+        super().__init__(3, 5, 200, [], x, y, 'pictures/characters/Priest/priest_0_{}.png', 5, 20, 20)
 
     def ulta(self):
         """восстанавливает 1 еденицу здоровья"""

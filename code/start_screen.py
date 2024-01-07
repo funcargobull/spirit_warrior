@@ -11,7 +11,7 @@ from weapons import *
 pygame.init()
 pygame.font.init()
 
-screen = pygame.display.set_mode((1366, 768))
+screen = pygame.display.set_mode((1380, 780))
 pygame.display.set_caption("Spirit Warrior")
 pygame.display.set_icon(pygame.image.load('pictures/characters/Assassin/assassin_0_0.png'))
 w, h = pygame.display.get_surface().get_size()
@@ -38,8 +38,8 @@ class Camera:
 
     # Позиционировать камеру на объекте target
     def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - w // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - h // 2)
+        self.dx = -(target.rect.x + target.rect.width // 2 - pygame.display.get_surface().get_size()[0] // 2)
+        self.dy = -(target.rect.y + target.rect.height // 2 - pygame.display.get_surface().get_size()[1] // 2)
 
 
 # Класс текста
@@ -85,15 +85,10 @@ exit_game.rect.y = game_name.rect.y * 4.5
 running = True
 clock = pygame.time.Clock()
 pos = (0, 0)
-pairs = {
-    "Assassin": Assassin(w // 2, h // 2),
-    "Knight": Knight(w // 2, h // 2),
-    "Priest": Priest(w // 2, h // 2)
-}
+camera = Camera()
 
 while running:
     screen.fill((0, 0, 0))
-    screen.blit(walls_and_tiles, (0, 0))
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
@@ -128,8 +123,8 @@ while running:
                     with open("tmp.txt") as f:
                         hero_name = f.read()
                     # Начало новой игры
-                    character = pairs[hero_name]
-                    character.weapons = [SwordNinja(), LaserGun()]
+                    character = eval(f"{hero_name}(w // 2, h // 2)")
+                    character.weapons = [OldPistol(), Machete(), PPM1(), M4()]
                     new_game = NewGame(character, 1)
                     new_game.setup(w, h)
                     new_game_began = True
@@ -148,18 +143,26 @@ while running:
     choosing_character_sprites.draw(screen)
 
     if new_game_began:
-        walls.draw(walls_and_tiles)
-        tiles.draw(walls_and_tiles)
-        character_sprites.draw(screen)
+        screen.blit(walls_and_tiles, (0, 0))
+        camera.update(character)
+        for sprite in camera_entities:
+            camera.apply(sprite)
+
+        walls.draw(screen)
+        tiles.draw(screen)
         location_sprites.draw(screen)
         enemy_sprites.draw(screen)
         character_sprites.draw(screen)
+
         for w in weapons_sprites:
             if w == character.weapons[0]:
                 w.draw(screen)
+        character_sprites.draw(screen)
         bullet_sprites.draw(screen)
         character_sprites.update(events, pos)
         bullet_sprites.update()
+
+        ui_sprites.draw(screen)
 
     pygame.display.flip()
     clock.tick(60)

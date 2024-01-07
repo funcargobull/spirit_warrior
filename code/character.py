@@ -126,8 +126,11 @@ class Character(pygame.sprite.Sprite):
             going = self.go(0, 1)
         if keys[pygame.K_d]:
             going = self.go(1, 0)
+        if keys[pygame.K_w] and pygame.sprite.spritecollideany(self, walls):
+            going = self.go(0, 0)
         if keys[pygame.K_e]:
             self.interaction()
-        if pygame.sprite.spritecollideany(self, walls):  # столкновение со стеной
+        # столкновение со стеной
+        if pygame.sprite.spritecollideany(self, walls):
             self.go(*[-i for i in going])
         self.weapons[0].update(self)

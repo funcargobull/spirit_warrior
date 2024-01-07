@@ -20,6 +20,15 @@ def load_image(fullname, colorkey=None):
     return image
 
 
+class UiElement(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, file, size, *groups):
+        super().__init__(*groups)
+        self.image = pygame.transform.scale(load_image(file), size)
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+
+
 class Tile(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *groups):
         super().__init__(*groups)
@@ -54,3 +63,4 @@ class NewGame:
             for x in range(60, w - 60, 60):
                 Tile(x, y, tiles, camera_entities)
 
+        UiElement(15, 15, "pictures/ui/stats.png", (200, 98), ui_sprites)

@@ -30,7 +30,7 @@ class Bullet(pygame.sprite.Sprite):
             return
         self.rect.x += self.speed * cos(self.angle)
         self.rect.y += -self.speed * sin(self.angle)
-        if pygame.sprite.spritecollideany(self, location_sprites):  # столкновение со стеной
+        if pygame.sprite.spritecollideany(self, walls):  # столкновение со стеной
             self.kill()
         for b in pygame.sprite.spritecollide(self, bullet_sprites, False):  # столкновение с другой пулей
             if b.relation != self.relation:
