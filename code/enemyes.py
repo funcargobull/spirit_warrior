@@ -63,4 +63,5 @@ class KingSkeleton(Enemy):
 
 class Sangria(Enemy):
     def __init__(self, x, y):
-        super().__init__(800, 5, 3, 'pictures/enemyes/bossrush_final_normal_run_{}.png', 11, 'nearest', 900, x, y, boss=True)
+        super().__init__(800, 5, 3, 'pictures/enemyes/bossrush_final_normal_run_{}.png', 11, 'nearest', 900, x, y,
+                         boss=True)

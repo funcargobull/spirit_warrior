@@ -65,7 +65,7 @@ class Enemy(pygame.sprite.Sprite):
             self.change_image(self.ANIM_RIGHT[self.count_anim])
         else:
             self.change_image(self.ANIM_LEFT[self.count_anim])
-        going = (0, 0)
+        going = None
         if self.types == 'nearest':
             going = self.go(self.rotation_angle)
         if self.types == 'faraway':
@@ -73,11 +73,12 @@ class Enemy(pygame.sprite.Sprite):
             if (self.rect.x - character.rect.x) ** 2 + (self.rect.y - character.rect.y) ** 2 > 10000:
                 going = self.go(self.rotation_angle)
             elif -60 <= (self.rect.x - character.rect.x) ** 2 + (self.rect.y - character.rect.y) ** 2 - 10000 <= 60:
-                going = (0, 0)
+                going = None
             else:
                 going = self.go(-self.rotation_angle)
         if pygame.sprite.spritecollideany(self, location_sprites):  # столкновение со стеной
-            self.go(*[-i for i in going])
+            if going is not None:
+                self.go(radians(-180) + going)
         time = pygame.time.get_ticks()  # текущее время
         if self.firetime + self.ratefire < time:
             self.firetime = time

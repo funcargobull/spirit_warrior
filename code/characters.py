@@ -23,7 +23,7 @@ class Assassin(Character):
         """восстанавливает 30 едениц енергии"""
         time_action, time = 15000, pygame.time.get_ticks()
         if self.ulta_tick + time_action < time:
-            self.energy = min(self.energy + 30, self.energy)
+            self.energy = min(self.energy + 30, self.max_energy)
             self.ulta_tick = time
 
 
