@@ -32,7 +32,7 @@ class Enemy(pygame.sprite.Sprite):
     def go(self, angle):
         """сдвигает проивника согласно его скорости"""
         self.rect = self.rect.move(self.speed * cos(angle), -self.speed * sin(angle))
-        return self.speed * cos(angle), -self.speed * sin(angle)
+        return angle
 
     def position(self, x1, y1):
         """Изменяет угол направления движения противника"""
@@ -76,7 +76,7 @@ class Enemy(pygame.sprite.Sprite):
                 going = None
             else:
                 going = self.go(-self.rotation_angle)
-        if pygame.sprite.spritecollideany(self, location_sprites):  # столкновение со стеной
+        if pygame.sprite.spritecollideany(self, walls):  # столкновение со стеной
             if going is not None:
                 self.go(radians(-180) + going)
         time = pygame.time.get_ticks()  # текущее время
