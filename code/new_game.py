@@ -182,11 +182,5 @@ class NewGame:
                 enemies = item[1]
         for enemy in enemies.split(";"):
             obj = eval(f"{enemy}(0, 0)")
-            xS = []
-            yS = []
-            xS = [random.randint(*sorted([120 + obj.rect.width + 10, self.hero.rect.x - self.hero.rect.width - 20])), 
-                  random.randint(*sorted([self.hero.rect.x + self.hero.rect.width + 20, 1220 - obj.rect.width - 10]))]
-            yS = [random.randint(*sorted([60 + obj.rect.height + 10, self.hero.rect.y - self.hero.rect.height - 20])),
-                  random.randint(*sorted([self.hero.rect.y + self.hero.rect.height + 20, 560 - obj.rect.height - 10]))]
-            obj.rect.x = random.choice(xS)
-            obj.rect.y = random.choice(yS)
+            obj.rect.x = random.randint(120 + obj.rect.width + 20, 1220 - obj.rect.width - 20)
+            obj.rect.y = random.randint(60 + obj.rect.height + 20, 560 - obj.rect.height - 20)

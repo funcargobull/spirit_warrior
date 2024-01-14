@@ -73,6 +73,10 @@ game_win = Text("Победа", 70, (0, 255, 0), game_win_sprites)
 game_win.rect.x = w // 2 - game_win.rect.width // 2
 game_win.rect.y = h // 2 - game_win.rect.height // 2
 
+play_again = Text("Начать заново", 64, (255, 255, 255), game_over_sprites)
+play_again.rect.x = -1000
+play_again.rect.y = -1000
+
 # Игровой цикл
 running = True
 clock = pygame.time.Clock()
@@ -94,6 +98,28 @@ while running:
             for s in seller_sprites:
                 s.check_click(event.pos)
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            # Начать игру заново после выигрыша или проигрыша
+            if play_again.rect.collidepoint(event.pos):
+                play_again.rect.x = -1000
+                play_again.rect.y = -1000
+                for e in enemy_sprites:
+                    enemy_sprites.remove(e)
+                for d in bullet_sprites:
+                    bullet_sprites.remove(d)
+                for k in ui_sprites:
+                    ui_sprites.remove(k)
+                with open("tmp.txt") as f:
+                    hero_name = f.read()
+                # Начало новой игры
+                character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
+                character.weapons = [OldPistol()]
+                database.fill_data(hero_name, 1, "OldPistol", 0)
+                character.gaming = True
+                new_game = NewGame(character, database.get_wave())
+                new_game.setup()
+                new_game.start_wave()
+                new_game_began = True
+            
             # Начать игру
             if start_game.rect.collidepoint(event.pos):
                 for sprite in all_sprites.sprites():
@@ -195,12 +221,16 @@ while running:
         if character.health <= 0:
             new_game_began = False
             character.gaming = False
+            play_again.rect.x = game_over.rect.x + (game_over.rect.width - play_again.rect.width) // 2
+            play_again.rect.y = game_over.rect.y + game_over.rect.height + 10
             game_over_sprites.draw(screen)
 
             for s in all_sprites:
                 all_sprites.remove(s)
             for s in choosing_character_sprites:
                 choosing_character_sprites.remove(s)
+            for s in frames:
+                frames.remove(s)
         # выигрыш
         if character.wave == 16:
             new_game_began = False
@@ -211,6 +241,8 @@ while running:
                 all_sprites.remove(s)
             for s in choosing_character_sprites:
                 choosing_character_sprites.remove(s)
+            for s in frames:
+                frames.remove(s)
 
     except NameError:
         pass

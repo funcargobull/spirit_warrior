@@ -23,6 +23,11 @@ class Bullet(pygame.sprite.Sprite):
         self.time = pygame.time.get_ticks()  # время появления
         self.timelife = timelife  # время жизни пули (если необходимо)
 
+    def clear_all(self):
+        self.rect.size = (0, 0)
+        self.rect.x = -1000
+        self.rect.y = -1000
+    
     def update(self, character):
         # проверяем должна ли быть жива пуля
         if self.timelife is not None and self.time + self.timelife < pygame.time.get_ticks():
@@ -41,26 +46,17 @@ class Bullet(pygame.sprite.Sprite):
             if len(enemy) > 0:
                 if enemy[0].boss == 2:
                     if random.randint(1, 4) == 1:
-                        character.energy = min(character.energy + random.randint(1, 3), character.max_energy)
-                    if character.wave == 5:
-                        if random.randint(1, 15) in [2, 3, 4]:
-                            character.money += random.randint(1, 2)
-                    if character.wave == 10:
-                        if random.randint(1, 10) in [2, 3, 4]:
-                            character.money += random.randint(1, 2)
-                    if character.wave == 15:
-                        if random.randint(1, 10) in [2, 3, 4, 5]:
-                            character.money += random.randint(1, 2)
+                        character.energy = min(character.energy + random.randint(1, 2), character.max_energy)
+                    if random.randint(1, 15) in [2, 3, 4]:
+                        character.money += random.randint(1, 2)
                 enemy[0].health -= self.damage
                 self.kill()
                 if enemy[0].health <= 0:
                     if enemy[0].boss == 1:
                         if character.wave <= 5:
                             character.money += 1
-                        elif 5 < character.wave <= 10:
-                            character.money += 2
                         else:
-                            character.money += random.randint(2, 3)
+                            character.money += 2
                     elif enemy[0].boss == 2:
                         if character.wave <= 5:
                             character.money += 10
