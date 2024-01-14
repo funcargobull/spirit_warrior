@@ -6,46 +6,31 @@ class Database:
         self.conn = sqlite3.connect("database.db")
         self.cur = self.conn.cursor()
 
-    def create_tables(self):
-        # Текущие показатели игрока
-        self.cur.execute("""
-        create table if not exists current_stats (
-        hero TEXT,
-        hp INTEGER,
-        shield INTEGER,
-        energy INTEGER,
-        wave INTEGER,
-        weapon TEXT
-        )
-        """)
-
-        # Данные по волнам
-        self.cur.execute("""
-        create table if not exists waves_stats (
-        wave INT,
-        enemies TEXT
-        )
-        """)
-
-        self.conn.commit()
-
     def get_wave(self):
         self.cur.execute("select wave from current_stats")
-        return self.cur.fetchall()[0]
+        return self.cur.fetchall()[0][0]
 
-    def start_new_game(self):
-        pass
-        # self.cur.execute("delete from current_stats")
-        #
-        # with open("tmp.txt") as f:
-        #     hero_name = f.read()
-        #
-        # hero = eval(f"characters.{hero_name}()")
-        #
-        # self.cur.execute("""
-        # insert into current_stats values (?, ?, ?, ?, 1, "Machete")
-        # """, (hero_name, hero.health, hero.armor, hero.energy))
+    def fill_data(self, hero_name, hero_wave, hero_weapons, hero_money):
+        self.cur.execute("delete from current_stats")
+        self.cur.execute("""
+        insert into current_stats values (?, ?, ?, ?)
+        """, (hero_name, hero_wave, hero_weapons, hero_money))
+        self.conn.commit()
+
+    def update_data(self, hero_name, hero_wave, hero_weapons, hero_money):
+        self.cur.execute("""
+        update current_stats set wave = ?, weapons = ?, money = ? where hero = ?
+        """, (hero_wave, hero_weapons, hero_money, hero_name))
+        self.conn.commit()
+
+    def get_data(self):
+        self.cur.execute("select * from current_stats")
+        return self.cur.fetchall()[0]
 
     def get_waves(self):
         self.cur.execute("select * from waves_stats")
         return self.cur.fetchall()
+
+    def test(self):
+        self.cur.execute("delete from current_stats")
+        self.conn.commit()

@@ -6,7 +6,7 @@ from Bullet import Bullet
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, health, damage, speed, anim, count_anim, types, ratefire, x, y, boss=False):
-        super().__init__(enemy_sprites, all_sprites, camera_entities)
+        super().__init__(enemy_sprites, camera_entities)
         self.rotation_angle = 0  # угол поворота противника
         self.boss = 1 + int(bool(boss))  # множитель сложности
         self.firetime = pygame.time.get_ticks()  # время прошлой атаки

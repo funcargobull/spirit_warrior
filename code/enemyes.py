@@ -18,7 +18,7 @@ class Snowman(Enemy):
 
 class Star(Enemy):
     def __init__(self, x, y):
-        super().__init__(12, 3, 3, 'pictures/enemies/enemy36_{}.png', 6, 'faraway', 1100, x, y)
+        super().__init__(20, 3, 3, 'pictures/enemies/enemy36_{}.png', 6, 'faraway', 1100, x, y)
 
 
 class EliteMummy(Enemy):
@@ -53,15 +53,17 @@ class UpgradeSkeleton(Enemy):
 
 class EntTree(Enemy):
     def __init__(self, x, y):
-        super().__init__(510, 5, 3, 'pictures/enemies/boss14_new_{}.png', 8, 'stay', 900, x, y, boss=True)
+        super().__init__(300, 3, 3, 'pictures/enemies/boss14_new_{}.png',
+                         8, 'stay', 1200, x, y, boss=True)
 
 
 class KingSkeleton(Enemy):
     def __init__(self, x, y):
-        super().__init__(720, 5, 5, 'pictures/enemies/boss03_{}.png', 8, 'faraway', 1000, x, y, boss=True)
+        super().__init__(400, 5, 2, 'pictures/enemies/boss03_{}.png',
+                         8, 'faraway', 1200, x, y, boss=True)
 
 
 class Sangria(Enemy):
     def __init__(self, x, y):
-        super().__init__(800, 5, 3, 'pictures/enemies/bossrush_final_normal_run_{}.png', 11, 'nearest', 900, x, y,
+        super().__init__(500, 5, 3, 'pictures/enemies/bossrush_final_normal_run_{}.png', 11, 'nearest', 1000, x, y,
                          boss=True)

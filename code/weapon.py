@@ -5,15 +5,16 @@ from Bullet import Bullet
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, damage, size_bullet, type_bullet, ratefire, image, cost_energy, cost, speed_bullet):
-        super().__init__(weapons_sprites, camera_entities)
+    def __init__(self, damage, size_bullet, type_bullet, ratefire, image, cost_energy, cost, speed_bullet, russian_name):
+        super().__init__(weapons_sprites)
         self.damage = damage
         self.type_bullet = type_bullet
         self.speed_bullet = speed_bullet
         self.ratefire = ratefire
         self.cost_energy = cost_energy
         self.cost = cost
-        self.image = load_image(image, 2)
+        self.image_ = image
+        self.image = load_image(self.image_, 2)
         self.mask = pygame.mask.from_surface(self.image)
         self.orig_image = self.image.copy()
         self.rect = self.image.get_rect()
@@ -21,6 +22,7 @@ class Weapon(pygame.sprite.Sprite):
         self.size_bullet = size_bullet
         self.time_shot = pygame.time.get_ticks()
         self.angle = 0
+        self.russian_name = russian_name
 
     def attack(self, character):
         """аттакует противника"""

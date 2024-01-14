@@ -3,7 +3,7 @@ from sys import exit
 import pygame
 
 
-def load_image(name, scale, colorkey=None):
+def load_image(name, scale=1, colorkey=None):
     # если файл не существует, то выходим
     if not path.isfile(name):
         print(f"Файл с изображением '{name}' не найден")

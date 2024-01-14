@@ -6,18 +6,24 @@ from sprites import *
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, health, armor, energy, weapons, x, y, anim, speed, xc, yc):
-        super().__init__(character_sprites, camera_entities)
+        super().__init__(character_sprites)
         self.location = True  # если персонаж смотрит вправо, то True, иначе False
         self.rotation_angle = 0  # угол поворота оружия относительно персонажа
-        self.armor_tick = pygame.time.get_ticks()  # время, используемое для восстановления брони
-        self.ulta_tick = pygame.time.get_ticks()  # время, используемое для восстановления способности
-        self.change_weapon_tick = pygame.time.get_ticks()  # время, используемое для смены оружия
+        # время, используемое для восстановления брони
+        self.armor_tick = pygame.time.get_ticks()
+        # время, используемое для восстановления способности
+        self.ulta_tick = pygame.time.get_ticks()
+        # время, используемое для смены оружия
+        self.change_weapon_tick = pygame.time.get_ticks()
         # путь к анимации передается в формате название_файла{}.формат, где на месте {} будут стоять номера спрайтов
         self.ANIM_DEATH = load_image(anim.format(16), 2)
         self.ANIM_RIGHT = [load_image(anim.format(i), 2) for i in range(8, 16)]
-        self.ANIM_STAY_RIGHT = [load_image(anim.format(i), 2) for i in range(0, 8)]
-        self.ANIM_STAY_LEFT = [pygame.transform.flip(self.ANIM_STAY_RIGHT[i].copy(), True, False) for i in range(8)]
-        self.ANIM_LEFT = [pygame.transform.flip(self.ANIM_RIGHT[i].copy(), True, False) for i in range(8)]
+        self.ANIM_STAY_RIGHT = [load_image(
+            anim.format(i), 2) for i in range(0, 8)]
+        self.ANIM_STAY_LEFT = [pygame.transform.flip(
+            self.ANIM_STAY_RIGHT[i].copy(), True, False) for i in range(8)]
+        self.ANIM_LEFT = [pygame.transform.flip(
+            self.ANIM_RIGHT[i].copy(), True, False) for i in range(8)]
         self.animcount = 0
         self.image = self.ANIM_STAY_RIGHT[self.animcount]
         self.w, self.h = self.image.get_size()
@@ -33,8 +39,13 @@ class Character(pygame.sprite.Sprite):
         self.energy = self.max_energy = energy
         self.weapons = weapons
         self.money = 0
+        self.on_sell = False
         # стены
         self.walls = walls
+        # волна
+        self.wave = 1
+        # играем или нет
+        self.gaming = False
 
     def update_armor(self):
         """восстанавливает броню персонажа"""
@@ -42,7 +53,8 @@ class Character(pygame.sprite.Sprite):
         if self.armor_tick + 5000 <= time:  # время восстановления
             self.armor += 1
             if self.armor < self.max_armor:
-                self.armor_tick += 500  # убираем время, чтобы броня восстанавливалась по 1 еденице в секунду
+                # убираем время, чтобы броня восстанавливалась по 1 еденице в секунду
+                self.armor_tick += 500
 
     def go(self, x, y):
         """сдвигает персонажа согласно его скорости.
@@ -83,14 +95,11 @@ class Character(pygame.sprite.Sprite):
         """уникальная способность персонажа"""
         pass
 
-    def interaction(self):
-        """взаимодействие с объектами, с которыми оно возможно"""
-        pass
-
     def update(self, events, pos):
-        '''if self.health <= 0:  # проевряем, жив ли персонаж
-            self.image = self.ANIM_DEATH
-            return'''
+        if self.health <= 0:  # проевряем, жив ли персонаж
+            self.kill()
+            return
+
         self.position(*pos)
         going = []
         if self.armor == self.max_armor:
@@ -127,8 +136,6 @@ class Character(pygame.sprite.Sprite):
             going.append(self.go(0, 1))
         if keys[pygame.K_d]:
             going.append(self.go(1, 0))
-        if keys[pygame.K_e]:
-            self.interaction()
         # столкновение со стеной
         if pygame.sprite.spritecollideany(self, walls):
             for g in going:

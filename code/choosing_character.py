@@ -1,17 +1,5 @@
 import pygame
-
-
-# Загрузка картинки
-def load_image(fullname, colorkey=None):
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image
+from load_images import load_image
 
 
 # Рамка вокруг персонажа при его выборе
@@ -84,7 +72,7 @@ class Text(pygame.sprite.Sprite):
 
 # Основной класс окна с выбором персонажаs
 class ChoosingCharacter:
-    def __init__(self, group, width, height):
+    def __init__(self, group, width=1380, height=780):
         self.group = group
 
         self.main_text = Text(self.group, "Выберите персонажа", 80, (255, 255, 255))

@@ -11,6 +11,8 @@ choosing_character_sprites = pygame.sprite.Group()
 frames = pygame.sprite.Group()
 walls = pygame.sprite.Group()
 tiles = pygame.sprite.Group()
-
-# Подконтрольные камере спрайты
+seller = pygame.sprite.Group()
 camera_entities = pygame.sprite.Group()
+seller_sprites = pygame.sprite.Group()
+game_over_sprites = pygame.sprite.Group()
+game_win_sprites = pygame.sprite.Group()
