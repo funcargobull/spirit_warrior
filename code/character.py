@@ -38,7 +38,7 @@ class Character(pygame.sprite.Sprite):
         self.armor = self.max_armor = armor
         self.energy = self.max_energy = energy
         self.weapons = weapons
-        self.money = 70
+        self.money = 0
         self.on_sell = False
         # стены
         self.walls = walls
