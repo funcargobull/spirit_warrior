@@ -20,6 +20,7 @@ class Text(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
     
+    # клик на текст с названием оружия у торговца и его покупка
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse):
             for item in inspect.getmembers(weapons):
@@ -48,6 +49,7 @@ class Picture(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
     
+    # покупка оружия, но уже не через клик на текст, а на саму картинку оружия
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse) and self.file != "pictures/ui/seller_stand.png":
             for item in inspect.getmembers(weapons):
@@ -63,6 +65,7 @@ class Picture(pygame.sprite.Sprite):
         self.rect.x = -1000
         self.rect.y = -1000
 
+# главный класс по торговле
 class SellerSetup:
     def __init__(self, character):
         self.character = character
@@ -72,6 +75,7 @@ class SellerSetup:
 
         x_pic, y_pic = 272, 191
         for item in inspect.getmembers(weapons):
+            # размещение спрайтов (картинки оружия, его названия и стоимости)
             if str(item[1]).startswith("<class 'weapons.") and str(item[0]) != "OldPistol": # 582
                 weapon = eval(f"weapons.{item[0]}()")
                 pic = Picture(self.character, weapon.image_, x_pic, y_pic, None, seller_sprites) # (272, 191)

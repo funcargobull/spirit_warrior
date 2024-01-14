@@ -191,6 +191,7 @@ while running:
             seller_sprites.draw(screen)
     
     try:
+        # проигрыш
         if character.health <= 0:
             new_game_began = False
             character.gaming = False
@@ -200,6 +201,7 @@ while running:
                 all_sprites.remove(s)
             for s in choosing_character_sprites:
                 choosing_character_sprites.remove(s)
+        # выигрыш
         if character.wave == 16:
             new_game_began = False
             character.gaming = False

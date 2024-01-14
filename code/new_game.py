@@ -9,6 +9,7 @@ from load_images import load_image
 
 database = Database()
 
+# элемент пользовательского интерфейса
 class UiElement(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, file, size, *groups):
         super().__init__(*groups)
@@ -17,7 +18,7 @@ class UiElement(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
-
+# пол
 class Tile(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *groups):
         super().__init__(*groups)
@@ -26,7 +27,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
-
+# стена
 class Wall(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *groups):
         super().__init__(*groups)
@@ -35,7 +36,7 @@ class Wall(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
-
+# текст
 class Text(pygame.sprite.Sprite):
     def __init__(self, text, size, color):
         super().__init__(ui_sprites)
@@ -50,7 +51,7 @@ class Text(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
 
-
+# показ текущего оружия
 class WeaponShow(pygame.sprite.Sprite):
     def __init__(self, character, pos_x, pos_y, *groups):
         super().__init__(*groups)
@@ -59,7 +60,7 @@ class WeaponShow(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
-
+# торговец
 class Seller(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *groups):
         super().__init__(*groups)
@@ -68,7 +69,7 @@ class Seller(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
-
+# класс новой игры
 class NewGame:
     def __init__(self, hero, wave):
         self.hero = hero
@@ -81,8 +82,8 @@ class NewGame:
         self.weapon_show = None
         self.weapon_cost_energy_show = None
         self.show_e = None
-        self.status = "wave_off"
 
+    # создание пользовательского интерфейса (пол, стены, статистика, торговец, счетчик волны и оружие)
     def setup(self, w=1380, h=780):
         for x in range(0, w, 60):
             Wall(x, 0, walls, camera_entities)
@@ -113,10 +114,12 @@ class NewGame:
         self.money_count = Text(f"{self.hero.money}", 24, (255, 255, 255))
         self.wave_count = Text(f"Волна: {self.wave}", 24, (255, 255, 255))
 
+        # показ буквы Е при приближении к торговцу
         self.show_e = Text("E", 20, (255, 255, 255))
         self.show_e.rect.x = self.hero.rect.x + self.show_e.rect.width // 2
         self.show_e.rect.y = self.hero.rect.y - 10
 
+    # постоянное обновление спрайтов
     def update(self):
         ui_sprites.remove([self.health_count, self.armor_count, self.energy_count,
                           self.money_count, self.wave_count, self.weapon_show, self.weapon_cost_energy_show, self.show_e])
