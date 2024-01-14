@@ -102,6 +102,10 @@ while running:
             if play_again.rect.collidepoint(event.pos):
                 play_again.rect.x = -1000
                 play_again.rect.y = -1000
+                for k in all_sprites:
+                    all_sprites.remove(k)
+                for a in choosing_character_sprites:
+                    choosing_character_sprites.remove(a)
                 for e in enemy_sprites:
                     enemy_sprites.remove(e)
                 for d in bullet_sprites:
@@ -128,6 +132,8 @@ while running:
                 choosing_character = ChoosingCharacter(choosing_character_sprites)
             # Загрузить игру
             if load_game.rect.collidepoint(event.pos):
+                play_again.rect.x = -1000
+                play_again.rect.y = -1000
                 try:
                     hero_name, wave, weapons, money = database.get_data()
                     character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
