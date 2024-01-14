@@ -10,7 +10,7 @@ class Knight(Character):
     def ulta(self):
         """восстанавливает 3 еденицы брони"""
         time_action, time = 15000, pygame.time.get_ticks()
-        if self.ulta_tick + time_action < time:
+        if self.ulta_tick + time_action < time and self.armor != self.max_armor:
             self.armor = min(self.armor + 3, self.max_armor)
             self.ulta_tick = time
 
@@ -22,7 +22,7 @@ class Assassin(Character):
     def ulta(self):
         """восстанавливает 30 едениц енергии"""
         time_action, time = 15000, pygame.time.get_ticks()
-        if self.ulta_tick + time_action < time:
+        if self.ulta_tick + time_action < time and self.energy != self.max_energy:
             self.energy = min(self.energy + 30, self.max_energy)
             self.ulta_tick = time
 
@@ -34,6 +34,6 @@ class Priest(Character):
     def ulta(self):
         """восстанавливает 1 еденицу здоровья"""
         time_action, time = 15000, pygame.time.get_ticks()
-        if self.ulta_tick + time_action < time:
+        if self.ulta_tick + time_action < time and self.health != self.max_health:
             self.health = min(self.health + 1, self.max_health)
             self.ulta_tick = time
