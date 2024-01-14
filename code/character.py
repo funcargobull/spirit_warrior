@@ -40,6 +40,7 @@ class Character(pygame.sprite.Sprite):
         self.weapons = weapons
         self.money = 0
         self.on_sell = False
+        self.lose = False
         # стены
         self.walls = walls
         # волна

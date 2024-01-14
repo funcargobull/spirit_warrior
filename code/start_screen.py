@@ -65,13 +65,13 @@ exit_game = Text("Выход", 70, (252, 76, 73), all_sprites)
 exit_game.rect.x = w // 2 - exit_game.rect.width // 2
 exit_game.rect.y = game_name.rect.y * 4.5
 
-game_over = Text("Проигрыш", 70, (255, 0, 0), game_over_sprites)
-game_over.rect.x = w // 2 - game_over.rect.width // 2
-game_over.rect.y = h // 2 - game_over.rect.height // 2
-
 game_win = Text("Победа", 70, (0, 255, 0), game_win_sprites)
 game_win.rect.x = w // 2 - game_win.rect.width // 2
 game_win.rect.y = h // 2 - game_win.rect.height // 2
+
+game_over = Text("Проигрыш", 70, (255, 0, 0), game_over_sprites)
+game_over.rect.x = w // 2 - game_over.rect.width // 2
+game_over.rect.y = h // 2 - game_over.rect.height // 2
 
 play_again = Text("Начать заново", 64, (255, 255, 255), game_over_sprites)
 play_again.rect.x = -1000
@@ -100,18 +100,20 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             # Начать игру заново после выигрыша или проигрыша
             if play_again.rect.collidepoint(event.pos):
-                play_again.rect.x = -1000
-                play_again.rect.y = -1000
+                for s in game_over_sprites:
+                    game_over_sprites.remove(s)
                 for k in all_sprites:
                     all_sprites.remove(k)
-                for a in choosing_character_sprites:
-                    choosing_character_sprites.remove(a)
+                for i in choosing_character_sprites.sprites():
+                    i.clear_all()
                 for e in enemy_sprites:
                     enemy_sprites.remove(e)
                 for d in bullet_sprites:
                     bullet_sprites.remove(d)
                 for k in ui_sprites:
                     ui_sprites.remove(k)
+                for s in character_sprites:
+                    character_sprites.remove(s)
                 with open("tmp.txt") as f:
                     hero_name = f.read()
                 # Начало новой игры
@@ -123,19 +125,32 @@ while running:
                 new_game.setup()
                 new_game.start_wave()
                 new_game_began = True
-            
+                play_again.rect.x = -1000
+                play_again.rect.y = -1000
+
             # Начать игру
             if start_game.rect.collidepoint(event.pos):
                 for sprite in all_sprites.sprites():
                     sprite.clear_all()
                 # Окно выбора персонажа
-                choosing_character = ChoosingCharacter(choosing_character_sprites)
+                choosing_character = ChoosingCharacter(
+                    choosing_character_sprites)
             # Загрузить игру
             if load_game.rect.collidepoint(event.pos):
                 play_again.rect.x = -1000
                 play_again.rect.y = -1000
+                for s in all_sprites.sprites():
+                    s.clear_all()
+                for s in game_over_sprites:
+                    game_over_sprites.remove(s)
                 try:
+                    for s in character_sprites:
+                        character_sprites.remove(s)
+                    for i in choosing_character_sprites.sprites():
+                        i.clear_all()
                     hero_name, wave, weapons, money = database.get_data()
+                    with open("tmp.txt", "w") as f:
+                        f.write(hero_name)
                     character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
                     character.weapons = []
                     for weapon in weapons.split(";"):
@@ -146,6 +161,8 @@ while running:
                     new_game.setup()
                     new_game.start_wave()
                     new_game_began = True
+                    play_again.rect.x = -1000
+                    play_again.rect.y = -1000
                 except IndexError:
                     pass
             # Выйти
@@ -156,7 +173,13 @@ while running:
             # Начать игру (окно выбора персонажа)
             try:
                 if choosing_character.start_new_game.rect.collidepoint(event.pos) and os.path.exists(
-                        "tmp.txt"):
+                        "tmp.txt") and not new_game_began:
+                    for s in game_over_sprites:
+                        game_over_sprites.remove(s)
+                    play_again.rect.x = -1000
+                    play_again.rect.y = -1000
+                    for s in character_sprites:
+                        character_sprites.remove(s)
                     for sprite in choosing_character_sprites.sprites():
                         sprite.clear_all()
                     for sprite in frames.sprites():
@@ -189,9 +212,15 @@ while running:
 
         choosing_character_sprites.update(event, frames)
 
-    all_sprites.draw(screen)
-    frames.draw(screen)
-    choosing_character_sprites.draw(screen)
+    try:
+        if not character.lose:
+            all_sprites.draw(screen)
+            frames.draw(screen)
+            choosing_character_sprites.draw(screen)
+    except NameError:
+        all_sprites.draw(screen)
+        frames.draw(screen)
+        choosing_character_sprites.draw(screen)
 
     if new_game_began and character.health > 0 and character.gaming:
         screen.blit(walls_and_tiles, (0, 0))
@@ -221,14 +250,24 @@ while running:
             enemy_sprites.update(character)
         else:
             seller_sprites.draw(screen)
-    
+
     try:
         # проигрыш
         if character.health <= 0:
             new_game_began = False
             character.gaming = False
-            play_again.rect.x = game_over.rect.x + (game_over.rect.width - play_again.rect.width) // 2
+            character.lose = True
+
+            game_over = Text("Проигрыш", 70, (255, 0, 0), game_over_sprites)
+            game_over.rect.x = 1380 // 2 - game_over.rect.width // 2
+            game_over.rect.y = 780 // 2 - game_over.rect.height // 2
+
+            play_again = Text("Начать заново", 64,
+                              (255, 255, 255), game_over_sprites)
+            play_again.rect.x = game_over.rect.x + \
+                (game_over.rect.width - play_again.rect.width) // 2
             play_again.rect.y = game_over.rect.y + game_over.rect.height + 10
+
             game_over_sprites.draw(screen)
 
             for s in all_sprites:
@@ -241,6 +280,7 @@ while running:
         if character.wave == 16:
             new_game_began = False
             character.gaming = False
+            character.lose = True
             game_win_sprites.draw(screen)
 
             for s in all_sprites:
