@@ -177,10 +177,14 @@ class NewGame:
         if not enemy_sprites.sprites():
             self.wave += 1
             self.hero.wave += 1
-
             tmp_weapons = [weapon.__class__.__name__ for weapon in self.hero.weapons]
-            database.update_data(str(self.hero.__class__.__name__), self.hero.wave, ";".join(tmp_weapons),
-                                 self.hero.money)
+            if self.hero.wave != 16:
+                database.update_data(str(self.hero.__class__.__name__), self.hero.wave, ";".join(tmp_weapons),
+                                     self.hero.money)
+            else:
+                database.update_data(str(self.hero.__class__.__name__), 1, 'OldPistol',
+                                     0)
+                return
             if self.wave <= 15:
                 self.start_wave()
 
