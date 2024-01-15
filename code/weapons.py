@@ -28,7 +28,7 @@ class AK(Weapon):
 
 class SnowFox(Weapon):
     def __init__(self):
-        super().__init__(2, 0.5, 'gun', 150, 'pictures/weapons/weapons_10.png', 0, 20, 10, "Снежная лиса")
+        super().__init__(1, 0.5, 'gun', 150, 'pictures/weapons/weapons_10.png', 0, 30, 10, "Снежная лиса")
 
 
 class M4(Weapon):

@@ -5,6 +5,7 @@ from load_images import load_image
 from sprites import *
 from potions import *
 
+
 class Text(pygame.sprite.Sprite):
     def __init__(self, character, text, size, color):
         super().__init__(seller_sprites)
@@ -19,7 +20,7 @@ class Text(pygame.sprite.Sprite):
         self.image = pygame.Surface((W, H), pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
-    
+
     # клик на текст с названием оружия у торговца и его покупка
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse):
@@ -30,11 +31,12 @@ class Text(pygame.sprite.Sprite):
                         if self.character.money >= weapon.cost:
                             self.character.weapons.append(weapon)
                             self.character.money -= weapon.cost
-    
+
     def clear_all(self):
         self.rect.size = (0, 0)
         self.rect.x = -1000
         self.rect.y = -1000
+
 
 class Picture(pygame.sprite.Sprite):
     def __init__(self, character, file, pos_x, pos_y, size=None, *groups):
@@ -48,7 +50,7 @@ class Picture(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
-    
+
     # покупка оружия, но уже не через клик на текст, а на саму картинку оружия
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse) and self.file != "pictures/ui/seller_stand.png":
@@ -59,11 +61,12 @@ class Picture(pygame.sprite.Sprite):
                         if self.character.money >= weapon.cost:
                             self.character.weapons.append(weapon)
                             self.character.money -= weapon.cost
-    
+
     def clear_all(self):
         self.rect.size = (0, 0)
         self.rect.x = -1000
         self.rect.y = -1000
+
 
 # главный класс по торговле
 class SellerSetup:
@@ -76,9 +79,9 @@ class SellerSetup:
         x_pic, y_pic = 272, 191
         for item in inspect.getmembers(weapons):
             # размещение спрайтов (картинки оружия, его названия и стоимости)
-            if str(item[1]).startswith("<class 'weapons.") and str(item[0]) != "OldPistol": # 582
+            if str(item[1]).startswith("<class 'weapons.") and str(item[0]) != "OldPistol":  # 582
                 weapon = eval(f"weapons.{item[0]}()")
-                pic = Picture(self.character, weapon.image_, x_pic, y_pic, None, seller_sprites) # (272, 191)
+                pic = Picture(self.character, weapon.image_, x_pic, y_pic, None, seller_sprites)  # (272, 191)
                 text = Text(self.character, weapon.russian_name, 15, (0, 0, 0))
                 text.rect.x = pic.rect.x + pic.rect.width + 10
                 text.rect.y = pic.rect.y + (pic.rect.height - text.rect.height) // 2
@@ -96,17 +99,20 @@ class SellerSetup:
         small_health_cost.rect.x = small_health.rect.x + small_health.rect.width + 10
         small_health_cost.rect.y = small_health.rect.y + (small_health.rect.height - small_health_cost.rect.height) // 2
 
-        big_health = BigHealthPotion(self.character, small_health_cost.rect.x + small_health_cost.rect.width + 10, small_health.rect.y - 12, 0, 0)
+        big_health = BigHealthPotion(self.character, small_health_cost.rect.x + small_health_cost.rect.width + 10,
+                                     small_health.rect.y - 12, 0, 0)
         big_health_cost = Text(self.character, str(big_health.cost), 15, (255, 165, 0))
         big_health_cost.rect.x = big_health.rect.x + big_health.rect.width + 10
         big_health_cost.rect.y = big_health.rect.y + (big_health.rect.height - big_health_cost.rect.height) // 2
 
-        small_energy = SmallEnergyPotion(self.character, small_health.rect.x, small_health.rect.y + small_health.rect.height + 10, 0, 0)
+        small_energy = SmallEnergyPotion(self.character, small_health.rect.x,
+                                         small_health.rect.y + small_health.rect.height + 10, 0, 0)
         small_energy_cost = Text(self.character, str(small_energy.cost), 15, (255, 165, 0))
         small_energy_cost.rect.x = small_energy.rect.x + small_energy.rect.width + 10
         small_energy_cost.rect.y = small_energy.rect.y + (small_energy.rect.height - small_energy_cost.rect.height) // 2
 
-        big_energy = BigEnergyPotion(self.character, big_health.rect.x, big_health.rect.y + big_health.rect.height + 10, 0, 0)
+        big_energy = BigEnergyPotion(self.character, big_health.rect.x, big_health.rect.y + big_health.rect.height + 10,
+                                     0, 0)
         big_energy_cost = Text(self.character, str(big_energy.cost), 15, (255, 165, 0))
         big_energy_cost.rect.x = big_energy.rect.x + big_energy.rect.width + 10
         big_energy_cost.rect.y = big_energy.rect.y + (big_energy.rect.height - big_energy_cost.rect.height) // 2

@@ -5,7 +5,8 @@ from Bullet import Bullet
 
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, damage, size_bullet, type_bullet, ratefire, image, cost_energy, cost, speed_bullet, russian_name):
+    def __init__(self, damage, size_bullet, type_bullet, ratefire, image, cost_energy, cost, speed_bullet,
+                 russian_name):
         super().__init__(weapons_sprites)
         self.damage = damage
         self.type_bullet = type_bullet

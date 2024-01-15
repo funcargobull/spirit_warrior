@@ -4,6 +4,7 @@ from math import cos, sin, degrees
 import pygame
 import random
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, speed, size, damage, relation, timelife=None):
         super().__init__(bullet_sprites, all_sprites)
@@ -27,7 +28,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.size = (0, 0)
         self.rect.x = -1000
         self.rect.y = -1000
-    
+
     def update(self, character):
         # проверяем должна ли быть жива пуля
         if self.timelife is not None and self.time + self.timelife < pygame.time.get_ticks():
@@ -77,7 +78,7 @@ class Bullet(pygame.sprite.Sprite):
                 else:
                     character[0].health -= self.damage
                 self.kill()
-    
+
     def clear_all(self):
         self.rect.size = (0, 0)
         self.rect.x = -1000

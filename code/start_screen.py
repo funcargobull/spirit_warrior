@@ -165,6 +165,8 @@ while running:
                     play_again.rect.y = -1000
                 except IndexError:
                     pass
+                except UnboundLocalError:
+                    running = False
             # Выйти
             if exit_game.rect.collidepoint(event.pos):
                 if os.path.exists("tmp.txt"):
@@ -264,8 +266,7 @@ while running:
 
             play_again = Text("Начать заново", 64,
                               (255, 255, 255), game_over_sprites)
-            play_again.rect.x = game_over.rect.x + \
-                (game_over.rect.width - play_again.rect.width) // 2
+            play_again.rect.x = game_over.rect.x + (game_over.rect.width - play_again.rect.width) // 2
             play_again.rect.y = game_over.rect.y + game_over.rect.height + 10
 
             game_over_sprites.draw(screen)

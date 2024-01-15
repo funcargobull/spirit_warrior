@@ -2,6 +2,7 @@ import pygame
 from sprites import *
 from load_images import load_image
 
+
 # зелье
 class Potion(pygame.sprite.Sprite):
     def __init__(self, character, file, cost, add_health, add_energy):
@@ -13,7 +14,7 @@ class Potion(pygame.sprite.Sprite):
         self.cost = cost
         self.add_health = add_health
         self.add_energy = add_energy
-    
+
     # клик на зелье и проверка, может ли игрок его купить
     # маленькое зелье здоровья - +2 hp, большое зелье - +4 hp
     # маленькое зелье энергии - +40 энергии, большое зелье - +80 энергии
@@ -35,7 +36,7 @@ class Potion(pygame.sprite.Sprite):
                 elif self.file.split("_")[1] == "energy":
                     self.character.energy = self.add_energy
                     self.character.money -= self.cost
-                
+
     # очистка спрайта с экрана
     def clear_all(self):
         self.rect.size = (0, 0)

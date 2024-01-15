@@ -9,6 +9,7 @@ from load_images import load_image
 
 database = Database()
 
+
 # элемент пользовательского интерфейса
 class UiElement(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, file, size, *groups):
@@ -17,6 +18,7 @@ class UiElement(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
+
 
 # пол
 class Tile(pygame.sprite.Sprite):
@@ -27,6 +29,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
+
 # стена
 class Wall(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, *groups):
@@ -35,6 +38,7 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
+
 
 # текст
 class Text(pygame.sprite.Sprite):
@@ -51,6 +55,7 @@ class Text(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.image.blit(self.textSurf, (self.rect.x, self.rect.y))
 
+
 # показ текущего оружия
 class WeaponShow(pygame.sprite.Sprite):
     def __init__(self, character, pos_x, pos_y, *groups):
@@ -59,6 +64,7 @@ class WeaponShow(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y
+
 
 # торговец
 class Seller(pygame.sprite.Sprite):
@@ -69,10 +75,12 @@ class Seller(pygame.sprite.Sprite):
         self.rect.x = pos_x
         self.rect.y = pos_y
 
+
 # класс новой игры
 class NewGame:
     def __init__(self, hero, wave):
         self.hero = hero
+        self.hero.wave = wave
         self.wave = wave
         self.health_count = None
         self.energy_count = None
@@ -122,7 +130,8 @@ class NewGame:
     # постоянное обновление спрайтов
     def update(self):
         ui_sprites.remove([self.health_count, self.armor_count, self.energy_count,
-                          self.money_count, self.wave_count, self.weapon_show, self.weapon_cost_energy_show, self.show_e])
+                           self.money_count, self.wave_count, self.weapon_show, self.weapon_cost_energy_show,
+                           self.show_e])
 
         self.health_count = Text(
             f"{self.hero.health}/{self.hero.max_health}", 20, (255, 255, 255))
@@ -133,13 +142,13 @@ class NewGame:
             f"{self.hero.armor}/{self.hero.max_armor}", 20, (255, 255, 255))
         self.armor_count.rect.x = self.health_count.rect.x
         self.armor_count.rect.y = self.health_count.rect.y + \
-            self.armor_count.rect.height + 3
+                                  self.armor_count.rect.height + 3
 
         self.energy_count = Text(
             f"{self.hero.energy}/{self.hero.max_energy}", 20, (255, 255, 255))
         self.energy_count.rect.x = 105
         self.energy_count.rect.y = self.armor_count.rect.y + \
-            self.energy_count.rect.height + 4
+                                   self.energy_count.rect.height + 4
 
         self.money_count = Text(f"{self.hero.money}", 30, (255, 255, 255))
         self.money_count.rect.x = 1225
@@ -156,7 +165,7 @@ class NewGame:
         self.weapon_cost_energy_show = Text(
             f"{self.hero.weapons[0].cost_energy}", 24, (255, 255, 255))
         self.weapon_cost_energy_show.rect.x = self.weapon_show.rect.x + \
-            self.weapon_show.rect.width + self.weapon_cost_energy_show.rect.width + 5
+                                              self.weapon_show.rect.width + self.weapon_cost_energy_show.rect.width + 5
         self.weapon_cost_energy_show.rect.y = self.weapon_show.rect.y - 8
 
         # появление буквы Е
@@ -170,16 +179,20 @@ class NewGame:
             self.hero.wave += 1
 
             tmp_weapons = [weapon.__class__.__name__ for weapon in self.hero.weapons]
-            database.update_data(str(self.hero.__class__.__name__), self.hero.wave, ";".join(tmp_weapons), self.hero.money)
+            database.update_data(str(self.hero.__class__.__name__), self.hero.wave, ";".join(tmp_weapons),
+                                 self.hero.money)
             if self.wave <= 15:
                 self.start_wave()
 
     # начало новой волны
     def start_wave(self):
+        enemies = None
         # получение врагов из БД и прорисовка
         for item in database.get_waves():
             if self.wave == item[0]:
                 enemies = item[1]
+        if enemies is None:
+            raise UnboundLocalError
         for enemy in enemies.split(";"):
             obj = eval(f"{enemy}(0, 0)")
             obj.rect.x = random.randint(120 + obj.rect.width + 20, 1220 - obj.rect.width - 20)
