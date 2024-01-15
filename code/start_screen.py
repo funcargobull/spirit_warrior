@@ -137,36 +137,37 @@ while running:
                     choosing_character_sprites)
             # Загрузить игру
             if load_game.rect.collidepoint(event.pos):
-                play_again.rect.x = -1000
-                play_again.rect.y = -1000
-                for s in all_sprites.sprites():
-                    s.clear_all()
-                for s in game_over_sprites:
-                    game_over_sprites.remove(s)
-                try:
-                    for s in character_sprites:
-                        character_sprites.remove(s)
-                    for i in choosing_character_sprites.sprites():
-                        i.clear_all()
-                    hero_name, wave, weapons, money = database.get_data()
-                    with open("tmp.txt", "w") as f:
-                        f.write(hero_name)
-                    character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
-                    character.weapons = []
-                    for weapon in weapons.split(";"):
-                        character.weapons.append(eval(f"{weapon}()"))
-                    character.money = money
-                    character.gaming = True
-                    new_game = NewGame(character, wave)
-                    new_game.setup()
-                    new_game.start_wave()
-                    new_game_began = True
+                hero_name, wave, weapons, money = database.get_data()
+                if wave != 16:
                     play_again.rect.x = -1000
                     play_again.rect.y = -1000
-                except IndexError:
-                    pass
-                except UnboundLocalError:
-                    running = False
+                    for s in all_sprites.sprites():
+                        s.clear_all()
+                    for s in game_over_sprites:
+                        game_over_sprites.remove(s)
+                    try:
+                        for s in character_sprites:
+                            character_sprites.remove(s)
+                        for i in choosing_character_sprites.sprites():
+                            i.clear_all()
+                        with open("tmp.txt", "w") as f:
+                            f.write(hero_name)
+                        character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
+                        character.weapons = []
+                        for weapon in weapons.split(";"):
+                            character.weapons.append(eval(f"{weapon}()"))
+                        character.money = money
+                        character.gaming = True
+                        new_game = NewGame(character, wave)
+                        new_game.setup()
+                        new_game.start_wave()
+                        new_game_began = True
+                        play_again.rect.x = -1000
+                        play_again.rect.y = -1000
+                    except IndexError:
+                        pass
+                    except UnboundLocalError:
+                        pass
             # Выйти
             if exit_game.rect.collidepoint(event.pos):
                 if os.path.exists("tmp.txt"):
@@ -174,29 +175,32 @@ while running:
                 running = False
             # Начать игру (окно выбора персонажа)
             try:
-                if choosing_character.start_new_game.rect.collidepoint(event.pos) and os.path.exists(
-                        "tmp.txt") and not new_game_began:
-                    for s in game_over_sprites:
-                        game_over_sprites.remove(s)
-                    play_again.rect.x = -1000
-                    play_again.rect.y = -1000
-                    for s in character_sprites:
-                        character_sprites.remove(s)
-                    for sprite in choosing_character_sprites.sprites():
-                        sprite.clear_all()
-                    for sprite in frames.sprites():
-                        sprite.clear_all()
-                    with open("tmp.txt") as f:
-                        hero_name = f.read()
-                    # Начало новой игры
-                    character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
-                    character.weapons = [OldPistol()]
-                    database.fill_data(hero_name, 1, "OldPistol", 0)
-                    character.gaming = True
-                    new_game = NewGame(character, database.get_wave())
-                    new_game.setup()
-                    new_game.start_wave()
-                    new_game_began = True
+                hero_name, wave, weapons, money = database.get_data()
+                if wave != 16:
+                    if choosing_character.start_new_game.rect.collidepoint(
+                            event.pos) and os.path.exists(
+                            "tmp.txt") and not new_game_began:
+                        for s in game_over_sprites:
+                            game_over_sprites.remove(s)
+                        play_again.rect.x = -1000
+                        play_again.rect.y = -1000
+                        for s in character_sprites:
+                            character_sprites.remove(s)
+                        for sprite in choosing_character_sprites.sprites():
+                            sprite.clear_all()
+                        for sprite in frames.sprites():
+                            sprite.clear_all()
+                        with open("tmp.txt") as f:
+                            hero_name = f.read()
+                        # Начало новой игры
+                        character = eval(f"{hero_name}(1380 // 2, 780 // 2)")
+                        character.weapons = [OldPistol()]
+                        database.fill_data(hero_name, 1, "OldPistol", 0)
+                        character.gaming = True
+                        new_game = NewGame(character, database.get_wave())
+                        new_game.setup()
+                        new_game.start_wave()
+                        new_game_began = True
             except NameError:
                 pass
 
@@ -266,7 +270,8 @@ while running:
 
             play_again = Text("Начать заново", 64,
                               (255, 255, 255), game_over_sprites)
-            play_again.rect.x = game_over.rect.x + (game_over.rect.width - play_again.rect.width) // 2
+            play_again.rect.x = game_over.rect.x + (
+                        game_over.rect.width - play_again.rect.width) // 2
             play_again.rect.y = game_over.rect.y + game_over.rect.height + 10
 
             game_over_sprites.draw(screen)
