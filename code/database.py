@@ -35,3 +35,7 @@ class Database:
     def get_waves(self):
         self.cur.execute("select * from waves_stats")
         return self.cur.fetchall()
+    
+    def delete(self):
+        self.cur.execute("delete from current_stats")
+        self.conn.commit()
