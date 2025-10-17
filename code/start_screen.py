@@ -207,16 +207,16 @@ while running:
                 pass
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                if os.path.exists("tmp.txt"):
-                    os.remove("tmp.txt")
-                running = False
             if event.key == pygame.K_e:
                 if new_game_began:
                     # взаимодействие с торговцем
                     if pygame.sprite.spritecollideany(character, seller):
                         character.on_sell = not character.on_sell
                         seller_setup = SellerSetup(character)
+            if event.key == pygame.K_ESCAPE:
+                if character.on_sell:
+                    character.on_sell = not character.on_sell
+                    seller_setup = SellerSetup(character)
 
         choosing_character_sprites.update(event, frames)
 
